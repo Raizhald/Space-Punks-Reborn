@@ -16,7 +16,7 @@ Extract it to a writable folder. The game folder is the `SpacePunks` folder that
 ## Install
 
 1. Download `Space.Punks.Reborn.exe` from the **[latest release](../../releases/latest)**.
-2. Put `Space Punks Reborn.exe` next to the game folder.
+2. Put the downloaded launcher next to the game folder.
 3. Start it, set your nickname and click **PLAY**. If the launcher asks for the game folder, select the `SpacePunks` folder.
 
 The first PLAY prepares the game automatically. The original game files are kept.
