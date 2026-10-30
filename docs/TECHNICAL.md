@@ -1,4 +1,4 @@
-# Technical notes (V6)
+# Technical notes (V7)
 
 Client: Space Punks Open Beta, Unreal Engine 4.27.2, `REL_UPDATE_9_Shipping_1221514`. All addresses below are RVAs in that build. Every patch checks the exact original bytes / file hash first and refuses anything unknown.
 
@@ -23,6 +23,7 @@ The exception table (`.pdata`) is copied, extended and kept sorted, so new code 
 | `PurchaseValidatePatch` | `UPlayerCRUDSystem` vtable (0x5710d80) slot +0x748 `ServerPurchaseItem_Validate` points to the existing "return true" stub 0x85ea20 (already used by ServerPurchaseHero) instead of "always reject" 0x85eb50 |
 | `MainMenuHubPatch` | the three remaining `OpenLevel(MainMenu)` continuations (lea at 0x14e0a5c, 0x14e0edc, 0x1528522) use the existing `/Game/Maps/HUB/Hub` string |
 | `PartyIdentityPatch` | before the native `FOnlinePartySystemEOS::CreateParty` (crash at 0xe8f428, null EOS user ID) the caller at 0x14fa51e checks the ID; null → original false/cleanup branch ("Unable to start party"), valid ID → original call. 34 bytes in free space of `.sphub` +0x100 |
+| `NullCurvePatch` (V7) | a hero stat is a base value times two curves reached through weak references (function at 0x3ca03e0). For a new player previewing a hero, a curve can be unloaded and the game read address 0xa8 and crashed. Jumps at 0x3ca0441/0x3ca049a and two small checks in `.sphub` (+0x1a0, +0x1c0) use the game's existing default value when a curve is missing |
 | `BotPatch` | 0–3 friendly AI sidekicks in missions |
 | `SpawnDataPatch` | `StaticData.k1z`: Get-a-Job step 225 had an empty spawn list (Type 0, `NoSquadFound`). Step 194 uses the same map 9, mission preset 157, planet 1, faction 1 and base power 13; its 60 spawn mappings are copied for 225 with new IDs (table at decompressed offset 4123653, 28-byte records, 4692 → 4752). Original backed up as `.before-reborn-v7.bak` |
 

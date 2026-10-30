@@ -4,7 +4,7 @@ An unofficial, fan-made **offline launcher** for the Space Punks Open Beta. The 
 
 > Not affiliated with Flying Wild Hog or Jagex. This repository contains no game files.
 
-Current version: **V6**
+Current version: **V7**
 
 ## Get the game
 
