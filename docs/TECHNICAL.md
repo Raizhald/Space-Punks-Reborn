@@ -31,7 +31,3 @@ Config pack: `SpacePunksLocal_P.pak` (PAK v3) holds a modified `K1/Config/Defaul
 ## Save file
 
 `Player0.sav` is read with `res_SaveSchema` (field names, offsets and sizes of the save structs, read from the running client's reflection data). The Premium tab changes only the `ResourceId 0` row of `PlayerResourceData` (adds it if missing), re-reads the result and compares every other field, cap 999 999 999, backup first, atomic write.
-
-## Not solved
-
-Online identity: the game has no Epic Online Services user ID offline. V5 only guards the Create Party path; other online calls (party, presence, friends) can still expect an ID. The separate LAN experiment adds more of these guards but is not part of this release.
