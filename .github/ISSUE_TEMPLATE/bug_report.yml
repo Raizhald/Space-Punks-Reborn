@@ -13,6 +13,7 @@ body:
       label: Launcher version
       description: Shown in the top-left corner of the launcher.
       options:
+        - V8
         - V7
         - Older version
     validations:
@@ -36,17 +37,6 @@ body:
     attributes:
       label: Mission name
       description: Only if it happened in a mission.
-  - type: dropdown
-    id: bots
-    attributes:
-      label: Number of bots
-      options:
-        - "0"
-        - "1"
-        - "2"
-        - "3"
-    validations:
-      required: true
   - type: dropdown
     id: profile
     attributes:
