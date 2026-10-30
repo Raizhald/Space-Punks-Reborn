@@ -28,7 +28,7 @@ If the game reports missing runtime components, run `Engine\Extras\Redist\en-us\
 - **Offline play** – starts straight into the hub, no server or Epic login needed.
 - **Heroes and missions** – choose and buy heroes, play missions and return to the hub afterwards (also via Abort Mission or Esc → Main Menu).
 - **Your nickname** in game.
-- **AI bots** – up to 3 friendly bots join you in missions.
+- **AI bots** *(experimental)* – up to 3 friendly bots join you in missions. They follow you, but don't fight yet.
 - **Premium store** – add premium currency in the launcher and buy items in the game.
 - **Profile overview** – heroes, resources and time played, read from your save. Your save is backed up before every change.
 
