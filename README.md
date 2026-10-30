@@ -32,4 +32,8 @@ If the game reports missing runtime components, run `Engine\Extras\Redist\en-us\
 - **Premium store** – add premium currency in the launcher and buy items in the game.
 - **Profile overview** – heroes, resources and time played, read from your save. Your save is backed up before every change.
 
+## Reporting bugs
+
+Please open an **[issue](../../issues/new/choose)** using the bug report form, so problems stay searchable. Attach the newest game log from the `Launcher logs` folder next to the launcher. You can also message me on Discord: \_sestak\_
+
 Technical notes: [docs/TECHNICAL.md](docs/TECHNICAL.md)

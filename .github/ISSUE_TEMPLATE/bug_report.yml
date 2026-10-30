@@ -1,0 +1,73 @@
+name: Bug report
+description: Report a crash or something that doesn't work
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please check the existing issues first – maybe someone already reported the same problem.
+  - type: dropdown
+    id: version
+    attributes:
+      label: Launcher version
+      description: Shown in the top-left corner of the launcher.
+      options:
+        - V7
+        - Older version
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did it happen?
+      options:
+        - Launcher (before the game started)
+        - Hero selection
+        - Hub
+        - Premium store
+        - Mission
+        - Returning to the hub
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: mission
+    attributes:
+      label: Mission name
+      description: Only if it happened in a mission.
+  - type: dropdown
+    id: bots
+    attributes:
+      label: Number of bots
+      options:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+    validations:
+      required: true
+  - type: dropdown
+    id: profile
+    attributes:
+      label: Profile
+      options:
+        - New profile (first time playing)
+        - Existing profile
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do right before it happened, and what did you see (Fatal error, freeze, no enemies, ...)?
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Game log
+      description: Attach the newest file from the `Launcher logs` folder next to the launcher (drag and drop it here). It records every game session, including crashes.
+  - type: input
+    id: pc
+    attributes:
+      label: PC
+      description: Windows version, CPU, GPU, RAM (optional).
