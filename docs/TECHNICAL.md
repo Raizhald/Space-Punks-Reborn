@@ -1,4 +1,4 @@
-# Technical notes (V7)
+# Technical notes (V8)
 
 Client: Space Punks Open Beta, Unreal Engine 4.27.2, `REL_UPDATE_9_Shipping_1221514`. All addresses below are RVAs in that build. Every patch checks the exact original bytes / file hash first and refuses anything unknown.
 
@@ -24,7 +24,6 @@ The exception table (`.pdata`) is copied, extended and kept sorted, so new code 
 | `MainMenuHubPatch` | the three remaining `OpenLevel(MainMenu)` continuations (lea at 0x14e0a5c, 0x14e0edc, 0x1528522) use the existing `/Game/Maps/HUB/Hub` string |
 | `PartyIdentityPatch` | before the native `FOnlinePartySystemEOS::CreateParty` (crash at 0xe8f428, null EOS user ID) the caller at 0x14fa51e checks the ID; null → original false/cleanup branch ("Unable to start party"), valid ID → original call. 34 bytes in free space of `.sphub` +0x100 |
 | `NullCurvePatch` (V7) | a hero stat is a base value times two curves reached through weak references (function at 0x3ca03e0). For a new player previewing a hero, a curve can be unloaded and the game read address 0xa8 and crashed. Jumps at 0x3ca0441/0x3ca049a and two small checks in `.sphub` (+0x1a0, +0x1c0) use the game's existing default value when a curve is missing |
-| `BotPatch` | experimental: turns on the game's developer cheat manager in a mission and asks it to spawn 0–3 sidekicks. They follow the player but currently don't attack |
 | `SpawnDataPatch` | `StaticData.k1z`: Get-a-Job step 225 had an empty spawn list (Type 0, `NoSquadFound`). Step 194 uses the same map 9, mission preset 157, planet 1, faction 1 and base power 13; its 60 spawn mappings are copied for 225 with new IDs (table at decompressed offset 4123653, 28-byte records, 4692 → 4752). Original backed up as `.before-reborn-v7.bak` |
 
 Config pack: `SpacePunksLocal_P.pak` (PAK v3) holds a modified `K1/Config/DefaultEngine.ini` (`GameDefaultMap=/Game/Maps/HUB/Hub.Hub`, `RequireEpicGamesLauncher=False`, `[URL] Name=<nickname>`), generated from `res_EngineTemplate`.
@@ -32,3 +31,7 @@ Config pack: `SpacePunksLocal_P.pak` (PAK v3) holds a modified `K1/Config/Defaul
 ## Save file
 
 `Player0.sav` is read with `res_SaveSchema` (field names, offsets and sizes of the save structs, read from the running client's reflection data). The Premium tab changes only the `ResourceId 0` row of `PlayerResourceData` (adds it if missing), re-reads the result and compares every other field, cap 999 999 999, backup first, atomic write.
+
+## Removed in V8: AI bots
+
+V1–V7 hooked the player controller and called the developer cheat manager (`BP_CheatManager_C`) to spawn `Char_Sidekick_C` actors. Runtime inspection showed: they use `AIC_Sidekick_C` with `BT_Sidekick`, perceive and target enemies (`TargetActor` set), and `Task_Fire` sets `IsFiring = 1`, but `BulletsInClip` stays at 100. `Char_Sidekick_C.StartFiring` only sets `IsFiring` and shows the muzzle particle; the mesh uses `AnimBP_Hostage_C` and the sidekick animation set has no shooting animations. The feature is unfinished in this build, so the launcher no longer applies the bot patch.
