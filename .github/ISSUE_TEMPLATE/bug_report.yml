@@ -13,8 +13,9 @@ body:
       label: Launcher version
       description: Shown in the top-left corner of the launcher.
       options:
+        - V10
+        - V9
         - V8
-        - V7
         - Older version
     validations:
       required: true
@@ -29,6 +30,8 @@ body:
         - Premium store
         - Mission
         - Returning to the hub
+        - Multiplayer (host / join)
+        - AI bots
         - Other
     validations:
       required: true

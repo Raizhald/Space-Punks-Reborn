@@ -1,4 +1,4 @@
-# Technical notes (V8)
+# Technical notes (V10)
 
 Client: Space Punks Open Beta, Unreal Engine 4.27.2, `REL_UPDATE_9_Shipping_1221514`. All addresses below are RVAs in that build. Every patch checks the exact original bytes / file hash first and refuses anything unknown.
 
@@ -32,6 +32,20 @@ Config pack: `SpacePunksLocal_P.pak` (PAK v3) holds a modified `K1/Config/Defaul
 
 `Player0.sav` is read with `res_SaveSchema` (field names, offsets and sizes of the save structs, read from the running client's reflection data). The Premium tab changes only the `ResourceId 0` row of `PlayerResourceData` (adds it if missing), re-reads the result and compares every other field, cap 999 999 999, backup first, atomic write.
 
-## Removed in V8: AI bots
+## V9: LAN multiplayer
 
-V1–V7 hooked the player controller and called the developer cheat manager (`BP_CheatManager_C`) to spawn `Char_Sidekick_C` actors. Runtime inspection showed: they use `AIC_Sidekick_C` with `BT_Sidekick`, perceive and target enemies (`TargetActor` set), and `Task_Fire` sets `IsFiring = 1`, but `BulletsInClip` stays at 100. `Char_Sidekick_C.StartFiring` only sets `IsFiring` and shows the muzzle particle; the mesh uses `AnimBP_Hostage_C` and the sidekick animation set has no shooting animations. The feature is unfinished in this build, so the launcher no longer applies the bot patch.
+- The config pack swaps `/Script/OnlineSubsystemRedpointEOS.EOSNetDriver` for `/Script/OnlineSubsystemUtils.IpNetDriver`.
+- **Host** (`SpacePunks-Win64-Host.exe`): `LoadMap` always calls `UWorld::Listen` (0x37669de `74 6e` → `90 90`), so the hub and every mission listen on port 7777.
+- **Join** (`SpacePunks-Win64-Join.exe`): the party-key path at 0x14fa2a0 jumps to code in `.sphub` that calls `OpenLevel(FName(address))`; the address (max 27 characters) is stored at 0x6d5c208. The local-selection helper (0x699f000) reconnects whenever the client is alone in its world (NetDriver null at `world+0x38`, max 50 attempts), because server travel doesn't move clients in this game.
+- Guards for the missing online services (null EOS IDs): peer guard at 0x141f628, presence guard at 0x15064c5, compare guard at 0x14bd838, HUD fix at 0x15c29c0 – all jump to small checks in `.sphub` with their own unwind data.
+- Joining 127.0.0.1 on the hosting PC starts the second game with `-UserDir` and a copy of the save (`Multiplayer test profile`).
+
+## V10: AI bots (experimental)
+
+V1–V7 spawned the game's `Char_Sidekick_C` through the developer cheat manager (`BP_CheatManager_C`), but the bots never shot. V8 removed the option. V10 brings it back with three fixes; the bot build is the host build plus these patches:
+
+1. **Firing** – `Task_Fire` only sets `IsFiring` (+0x950) on the sidekick; nothing calls its weapon. The sidekick vtable's ProcessEvent slot (0x4c78668 + 0x220) points to a helper in a new section `.spfire`: while `IsFiring` is set and the weapon (+0x880) has the native weapon vtable (0x4b48460), it calls the native Fire (vtable +0x6b8, 0x1644740) at most every 250 ms per bot (time from `KUSER_SHARED_DATA`), then forwards to ProcessEvent.
+2. **Obstacle test** – Fire skips the shot when the barrel is blocked. The test (0x1654010) reports "blocked" if `ObstacleTestLocationNative` / `ObstacleTestLocationEndNative` (+0x3f8/+0x400) are missing – and sidekick weapons don't have them. 0x16541fa `mov al,1` → `mov al,0` treats missing components as "not blocked" (player weapons always have them).
+3. **Damage** – projectile damage comes from the owning player's stats, so sidekick projectiles have `Damage` (+0x29c) = 0. At the start of the two native projectile damage functions (0x1484e40, 0x1485210) a check in `.spfire` sets a fixed damage (0.2) for projectiles whose instigator is a sidekick, team is the player team and damage is still 0. The game then scales it like an AI attack.
+
+Bots have no shooting animation (`AnimBP_Hostage_C`).
