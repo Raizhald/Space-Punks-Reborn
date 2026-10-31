@@ -1,4 +1,4 @@
-# Technical notes (V10)
+# Technical notes (V11)
 
 Client: Space Punks Open Beta, Unreal Engine 4.27.2, `REL_UPDATE_9_Shipping_1221514`. All addresses below are RVAs in that build. Every patch checks the exact original bytes / file hash first and refuses anything unknown.
 
@@ -49,3 +49,12 @@ V1–V7 spawned the game's `Char_Sidekick_C` through the developer cheat manager
 3. **Damage** – projectile damage comes from the owning player's stats, so sidekick projectiles have `Damage` (+0x29c) = 0. At the start of the two native projectile damage functions (0x1484e40, 0x1485210) a check in `.spfire` sets a fixed damage (0.2) for projectiles whose instigator is a sidekick, team is the player team and damage is still 0. The game then scales it like an AI attack.
 
 Bots have no shooting animation (`AnimBP_Hostage_C`).
+
+## V11: unlocked hub characters and The Crack
+
+`StaticData.k1z` (UE compressed blocks of 128 KiB, zlib) holds the game data; task and interaction requirements are JSON strings inside it. All edits keep the exact length, so only 3 of the 50 compressed blocks change (resource `StaticDataV11`, SHA-256 `c776980a…7adc75c37`; the V7 Get-a-Job spawn fix is included):
+
+- 15 task requirements of `TaskNpcRobot` (KI-42), `TaskNpcComputer` (The Choir) and `TaskNpcSoldier` (Vault Support tasks), plus the Vault Support unlock interaction: `AlwaysBlockedRequirement` → `FameRequirement` with default 0. Other requirements (fame, previous tasks) are kept.
+- Carrasco's *Take a Deep Dive* required `DA_Task_Endless_Unlock` to be finished, a task that nothing ever starts; that requirement is replaced by `FameRequirement` 0. The Crack keeps its own planet requirement (hero level 16). Entry costs one Phaser (resource 15).
+- **Task window fix** (`TaskWindowPatch`): opening KI-42's or The Choir's window read a task asset list that this build no longer has (null) and crashed at 0x3d275ea. 0x3d275df `33 ed 8b dd` → `eb 36 90 90` and 0x3d275e3 → a 27-byte null check in int3 padding at 0x5a2350; both missing cases use the game's existing default (0x3d27617).
+- KI-42's and The Choir's missions are on *Xena*, a game-mode location that isn't on the star map in this build.

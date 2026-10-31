@@ -13,6 +13,7 @@ body:
       label: Launcher version
       description: Shown in the top-left corner of the launcher.
       options:
+        - V11
         - V10
         - V9
         - V8
@@ -32,6 +33,7 @@ body:
         - Returning to the hub
         - Multiplayer (host / join)
         - AI bots
+        - Unlocked characters / The Crack
         - Other
     validations:
       required: true

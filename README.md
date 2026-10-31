@@ -4,7 +4,7 @@ An unofficial, fan-made **offline launcher** for the Space Punks Open Beta. The 
 
 > Not affiliated with Flying Wild Hog or Jagex. This repository contains no game files.
 
-Current version: **V10**
+Current version: **V11**
 
 ## Get the game
 
@@ -32,6 +32,7 @@ If the game reports missing runtime components, run `Engine\Extras\Redist\en-us\
 - **Profile overview** – heroes, resources and time played, read from your save. Your save is backed up before every change.
 - **Multiplayer (LAN)** – play the hub and missions together with friends (new in V9).
 - **AI bots (experimental)** – up to 3 AI teammates that fight with you in missions (new in V10).
+- **Locked hub characters and The Crack** – KI-42, The Choir, Vault Support and Carrasco are unlocked, The Crack (endless dungeon) can be entered (new in V11).
 
 ## Multiplayer
 
@@ -53,6 +54,16 @@ Notes:
 Open the **Bots** tab and choose Off / 1 / 2 / 3 bots, then click **PLAY**. The bots appear only in missions, follow you and shoot at enemies.
 
 They are the game's own unfinished "sidekick" characters: they have no shooting animation, their damage is a fixed value (it doesn't scale with mission level) and the game may crash. Bots are used only with **PLAY**, not with Host / Join. Your save is backed up before every game with bots. Windows may ask to allow network access.
+
+## Unlocked content (V11)
+
+The Open Beta has characters in the hub that are always locked, because their tasks were switched off in the game data. V11 turns them back on:
+
+- **Vault Support** – hub tasks *Power Up!* and *Oh Scrap!* (needs 500 Fame). Fully working.
+- **Carrasco** – the gateway to **The Crack**, the game's endless dungeon (5 tiers). He gives the task *Take a Deep Dive* and 2 Phasers. The Crack itself needs a hero at level 16 and one **Phaser** per run; its enemies are around level 70, so it is endgame content. You can add Phasers in the launcher's **Premium** tab.
+- **KI-42** and **The Choir** – their task windows open and you can accept their missions, but the missions take place on the planet *Xena*, which is not on the star map in this build, so they can't be played yet. The Choir is unfinished (no portrait, some missing texts).
+
+The original game data is backed up the first time you click PLAY.
 
 ## Reporting bugs
 
